@@ -7,7 +7,7 @@ This year I'm going to use rust as progamming language.
 
 Each day will have it's own folder with the code, input and other assets.
 
-### Day XX
+### DayXX
 
 - Cargo.lock
 - Cargo.toml
