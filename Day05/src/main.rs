@@ -7,10 +7,8 @@ fn read_input() -> Vec<u32> {
     let n = data.len();
     for i in 0..n {
         match data[i] {
-            b'B' => data[i] = b'1',
-            b'F' => data[i] = b'0',
-            b'R' => data[i] = b'1',
-            b'L' => data[i] = b'0',
+            b'B' | b'R' => data[i] = b'1',
+            b'F' | b'L' => data[i] = b'0',
             _ => {}
         }
     }
