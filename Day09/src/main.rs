@@ -40,6 +40,7 @@ fn part2(numbers : &Vec<u64>, target : u64) {
                 let s = &numbers[i..(i+j)];
                 if s.iter().sum::<u64>() ==  target {
                     println!("{}", s.iter().min().unwrap() + s.iter().max().unwrap());
+                    return;
                 }
             }
         }
