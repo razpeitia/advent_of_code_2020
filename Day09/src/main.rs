@@ -33,16 +33,25 @@ fn part1(numbers : &Vec<u64>, preamble : usize) -> u64 {
 }
 
 fn part2(numbers : &Vec<u64>, target : u64) {
-    let n = numbers.len();
-    for i in 0..(n-2) {
-        for j in 2..n {
-            if (i+j) < n {
-                let s = &numbers[i..(i+j)];
-                if s.iter().sum::<u64>() ==  target {
-                    println!("{}", s.iter().min().unwrap() + s.iter().max().unwrap());
-                    return;
-                }
-            }
+    let mut sum : u64 = 0;
+    let mut start : usize = 0;
+    for (i, value) in numbers.iter().enumerate() {
+        sum += value;
+
+        if sum < target {
+            continue;
+        }
+
+        if sum == target {
+            let &min = numbers[start..=i].iter().min().unwrap();
+            let &max = numbers[start..=i].iter().max().unwrap();
+            println!("{}", min + max);
+            return;
+        }
+
+        while sum > target {
+            sum -= numbers[start];
+            start += 1;
         }
     }
 }
