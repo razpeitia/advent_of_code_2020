@@ -138,3 +138,14 @@ However, after updating rules `8` and `11`, a total of _`12`_ messages match:
 *   `aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba`
 
 _After updating rules `8` and `11`, how many messages completely match rule `0`?_
+
+## The Solution
+
+### Part 1:
+
+Ah, that's a [context free grammar](https://en.wikipedia.org/wiki/Context-free_grammar) expressed in primitive [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form).
+Unfortunately I don't have experience implementing those :-P
+
+### Part 2:
+
+Work in progress
