@@ -31,80 +31,51 @@ fn hash_vec(vec : &VecDeque<u64>) -> u64 {
     hash.finish()
 }
 
-fn recurse_game(deck1 : &mut VecDeque<u64>, deck2 : &mut VecDeque<u64>, game: &mut u64) -> bool {
-    let mut round = 1;
-    let original_game = *game;
+fn recurse_game(deck1 : &mut VecDeque<u64>, deck2 : &mut VecDeque<u64>) -> bool {
     let mut cache : HashSet<u64> = HashSet::new();
-    // println!("\n=== Game {} ===\n", original_game);
     while !deck1.is_empty() && !deck2.is_empty() {
-        // println!("\n-- Round {} (Game {}) --\n", round, original_game);
-        // println!("Player 1's deck: {:?}", deck1);
-        // println!("Player 2's deck: {:?}", deck2);
         let h1 = hash_vec(&deck1);
         let h2 = hash_vec(&deck2);
         if cache.contains(&h1) && cache.contains(&h2) {
             // Player 1 wins
-            // println!("Loop found, player 1 wins");
             return true;
         }
         cache.insert(h1);
         cache.insert(h2);
         let c1 = deck1.pop_front().unwrap();
         let c2 = deck2.pop_front().unwrap();
-        // println!("Player 1 plays: {}", c1);
-        // println!("Player 2 plays: {}", c2);
-        if (c1 as usize) <= deck1.len() && (c2 as usize) <= deck2.len() {
-            // println!("Playing a sub-game to determine the winner...");
-            *game += 1;
-            let mut d1 = VecDeque::new();
-            for &v in deck1.iter() {
-                if d1.len() == (c1 as usize) {
-                    break;
-                }
-                d1.push_back(v);
-            }
-            let mut d2 = VecDeque::new();
-            for &v in deck2.iter() {
-                if d2.len() == (c2 as usize) {
-                    break;
-                }
-                d2.push_back(v);
-            }
 
-            let result = recurse_game(&mut d1, &mut d2, game);
-            // println!("...anyway, back to game {}.", original_game);
+        if (c1 as usize) <= deck1.len() && (c2 as usize) <= deck2.len() {
+            let mut d1 : VecDeque<u64> = deck1.iter().copied().take(c1 as usize).collect();
+            let mut d2 : VecDeque<u64> = deck2.iter().copied().take(c2 as usize).collect();
+
+            let result = recurse_game(&mut d1, &mut d2);
             if result {
-                // println!("Player 1 wins round {} of game {}!", round, original_game);
                 deck1.push_back(c1);
                 deck1.push_back(c2);
             } else {
-                // println!("Player 2 wins round {} of game {}!", round, original_game);
                 deck2.push_back(c2);
                 deck2.push_back(c1);
 
             }
-            round += 1;
             continue;
         }
         if c1 > c2 {
             deck1.push_back(c1);
             deck1.push_back(c2);
-            // println!("Player 1 wins round {} of game {}!", round, original_game);
         } else if c2 > c1 {
             deck2.push_back(c2);
             deck2.push_back(c1);
-            // println!("Player 2 wins round {} of game {}!", round, original_game);
         }
         else {
             unreachable!()
         }
-        round += 1;
     }
     !deck1.is_empty()
 }
 
 fn part2(deck1 : &mut VecDeque<u64>, deck2 : &mut VecDeque<u64>) {
-    let p1_wins = recurse_game(deck1, deck2, &mut 1);
+    let p1_wins = recurse_game(deck1, deck2);
     if p1_wins {
         let ans : u64 = deck1.iter().rev().enumerate().map(|(i, &v)| ((i+1) as u64) * v).sum();
         println!("{}", ans);
@@ -112,8 +83,6 @@ fn part2(deck1 : &mut VecDeque<u64>, deck2 : &mut VecDeque<u64>) {
         let ans : u64 = deck2.iter().rev().enumerate().map(|(i, &v)| ((i+1) as u64) * v).sum();
         println!("{}", ans);
     };
-    println!("Player1 {:?}", deck1);
-    println!("Player2 {:?}", deck2);
 }
 
 fn main() -> Result<(), io::Error> {
