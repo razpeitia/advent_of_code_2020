@@ -21,9 +21,9 @@ def mul_inv(a, b):
 
 def part2(ids):
     n = [ni for (_, ni) in ids]
-    a = [abs(ni - ai) for (ai, ni) in ids]
-    print(chinese_remainder(n, a))
-
+    a = [(-ai) % ni for (ai, ni) in ids]
+    ans = chinese_remainder(n, a)
+    return ans
 
 def part1(earliest, ids):
     m_id = None
@@ -49,9 +49,15 @@ def main():
         line = next(f).strip().split(",")
         ids = [int(i) for i in line if i != 'x']
         ids2 = [(i, int(id_)) for i, id_ in enumerate(line) if id_ != 'x']
-        ids2.sort(key=lambda x: x[1])
     part1(earliest, ids)
-    part2(ids2)
+    print("Tests part 2")
+    assert 3417 == part2([(0, 17), (2, 13), (3, 19)])
+    assert 754018 == part2([(0, 67), (1, 7), (2, 59), (3, 61)])
+    assert 779210 == part2([(0, 67), (2, 7), (3, 59), (4, 61)])
+    assert 1261476 == part2([(0, 67), (1, 7), (3, 59), (4, 61)])
+    assert 1202161486 == part2([(0, 1789), (1, 37), (2, 47), (3, 1889)])
+    t = part2(ids2)
+    print(part2(ids2))
 
 
 if __name__ == '__main__':
